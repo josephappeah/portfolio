@@ -4,3 +4,4 @@ asyncio
 bottle
 gevent
 tornado
+nest_asyncio
