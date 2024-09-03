@@ -1,7 +1,7 @@
 import React, {FC, useState} from 'react';
 import useWebSocket, {SendMessage} from "react-use-websocket";
 import {Quote} from "../../model/Quote";
-import {TraderConfig} from "../../configs/configs";
+import {TraderConfig} from "../../configs/Configs";
 
 export type WebSocketConnectionProps =  {
     onMessage: (message: Quote) => void;

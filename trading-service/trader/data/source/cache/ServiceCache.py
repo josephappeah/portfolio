@@ -53,7 +53,6 @@ class PositionsCache:
     def addPositionForUser(self, user: User, position: Position):
         userPositions: List[Position] = self._userNameToPositionsCache.get(user.getUsername(), [])
         userPositions.append(position)
-        print(position.toString())
         self._userNameToPositionsCache[user.getUsername()] = userPositions
 
     def getPositionsForUser(self, user: User):
@@ -84,8 +83,6 @@ class TraderServiceDataCache:
     def addPositionForUser(self, user: User, position: Position):
         if self._positionsCache:
             self._positionsCache.addPositionForUser(user, position)
-        else:
-            print("no cache")
 
     def removePositionForUser(self, user: User, position: Position):
         if self._positionsCache:

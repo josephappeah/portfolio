@@ -6,11 +6,13 @@ import {Button} from "../../components/ui/button";
 import {AccountBalance, DefaultAccountBalance} from "../model/Account";
 import {TraderUtils} from "../utils/TraderUtils";
 import TraderDao from "../dao/TraderDao";
+import {useAppDispatch} from "../storage/TraderReduxHooks";
+import {updateAccountBalance} from "../storage/TraderReduxSlice";
 
 export type AccountViewProps = {}
 export const AccountView:FC<AccountViewProps> = (props) => {
     const [accountBalance, setAccountBalance] = useState<AccountBalance[]>(DefaultAccountBalance.accountBalance);
-
+    const reduxPublisher = useAppDispatch()
     const onAccountReset = async() => {
         await TraderDao.updateAccountBalance(accountBalance);
     }
@@ -23,6 +25,7 @@ export const AccountView:FC<AccountViewProps> = (props) => {
             }
         }
         setAccountBalance(accountBalance)
+        reduxPublisher(updateAccountBalance(accountBalance))
     }
 
     useEffect(() => {
@@ -31,9 +34,11 @@ export const AccountView:FC<AccountViewProps> = (props) => {
                 //console.log(accountBalance);
                 if (accountBalance.length > 0) {
                     setAccountBalance(accountBalance)
+                    reduxPublisher(updateAccountBalance(accountBalance))
                 } else {
                     setAccountBalance(DefaultAccountBalance.accountBalance)
                     TraderDao.updateAccountBalance(DefaultAccountBalance.accountBalance);
+                    reduxPublisher(updateAccountBalance(accountBalance))
                 }
             }).catch((err) => {
                 console.log(err);

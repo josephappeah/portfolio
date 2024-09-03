@@ -107,6 +107,9 @@ class Position:
     def getStatus(self) -> str:
         return self._status
 
+    def setStatus(self, status):
+        self._status = status
+
     def getId(self) -> str:
         return self._id
 

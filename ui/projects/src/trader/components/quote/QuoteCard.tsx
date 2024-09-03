@@ -9,12 +9,15 @@ import {
     DialogTitle,
     DialogTrigger
 } from "../../../components/ui/dialog"
-import {useAppSelector} from "../../storage/TraderReduxHooks";
+import {useAppDispatch, useAppSelector} from "../../storage/TraderReduxHooks";
 import {Label} from "../../../components/ui/label";
 import {Input} from "../../../components/ui/input";
 import TraderDao from "../../dao/TraderDao";
 import {AssetName, Quote} from "../../model/Quote";
 import {Position, Side, Status} from "../../model/Position";
+import {QuoteValidation} from "./QuoteValidation";
+import {AccountBalance, DefaultAccountBalance} from "../../model/Account";
+import {updateAccountBalance} from "../../storage/TraderReduxSlice";
 
 export type QuoteCardProps = {
     assetName: AssetName;
@@ -23,6 +26,10 @@ export const QuoteCard: FC<QuoteCardProps> = (props) => {
     const [quote, setQuote] = useState<string>("");
     const [isLoading, setIsLoading] = useState(true);
     const [side, setSide] = useState<Side>(Side.Buy);
+    const [to, setTo] = useState<number>(1);
+    const reduxPublisher = useAppDispatch()
+    const [from, setFrom] = useState<number>(1);
+    const [accountBalance, setAccountBalance] = useState<AccountBalance[]>(DefaultAccountBalance.accountBalance)
     let isLoadingTimer: string | number | NodeJS.Timeout | undefined;
     const resetIsLoadingTimer = () => {
         if (isLoading) {
@@ -41,19 +48,45 @@ export const QuoteCard: FC<QuoteCardProps> = (props) => {
     useEffect(() => {
         if(appMetaData.traderMetaData.message.assetName === props.assetName) {
             setQuote(appMetaData.traderMetaData.message.quote)
+            console.log(appMetaData.traderMetaData.accountBalances)
+            setAccountBalance(appMetaData.traderMetaData.accountBalances)
+            updateToFrom()
         }
     }, [appMetaData.traderMetaData.message, props.assetName]);
 
+    const updateAccountBalances = () => {
+        const myAccountBalance = QuoteValidation.updateAccountBalances(
+            props.assetName, accountBalance, to, from
+        )
+        TraderDao.updateAccountBalance(myAccountBalance)
+        reduxPublisher(updateAccountBalance(myAccountBalance))
+
+    }
+
     const handleNewPosition = () => {
-        const myQuote: Quote = {assetName: props.assetName, quote: quote}
-        const myPosition: Position = {
-            amount: 0,
-            assetName: props.assetName,
-            quote: myQuote,
-            side: side,
-            status: Status.Pending
+        if(QuoteValidation.canTrade(props.assetName, side, side === Side.Buy? from : to, accountBalance)) {
+            const myQuote: Quote = {assetName: props.assetName, quote: quote}
+            const myPosition: Position = {
+                amount: side === Side.Buy? from : to,
+                assetName: props.assetName,
+                quote: myQuote,
+                side: side,
+                status: Status.Filled
+            }
+            TraderDao.newPosition(myQuote, myPosition)
+            updateAccountBalances()
+        } else {
+            alert("Insufficient Funds")
         }
-        TraderDao.newPosition(myQuote, myPosition)
+    }
+
+    const updateToFrom = () => {
+        const ratio = quote !== "" ? parseFloat(quote) : 1;
+        if (side === Side.Buy) {
+            setTo(from * ratio)
+        } else {
+            setFrom(to / ratio)
+        }
     }
 
 
@@ -81,11 +114,15 @@ export const QuoteCard: FC<QuoteCardProps> = (props) => {
                     <div className="grid gap-2 py-2">
                         <div className="space-y-1">
                             <Label htmlFor="current">{props.assetName.split("/")[0]}</Label>
-                            <Input id="current" type="number"/>
+                            <Input id="current" type="number" value={from} onChange={(e) => {
+                                setFrom(parseInt(e.target.value)); updateToFrom();
+                                }}/>
                         </div>
                         <div className="space-y-1">
                             <Label htmlFor="current">{props.assetName.split("/")[1]}</Label>
-                            <Input id="current" type="number"/>
+                            <Input id="current" type="number" value={to} onChange={(e) => {
+                                setTo(parseInt(e.target.value)); updateToFrom();
+                            }}/>
                         </div>
                     </div>
                     <DialogFooter className="grid w-full grid-cols-2">

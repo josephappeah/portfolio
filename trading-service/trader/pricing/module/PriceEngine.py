@@ -35,7 +35,9 @@ class PriceEngine:
 
     def subscribe(self, subscriber: ISubscriber):
         if subscriber:
-            self._subscribers[subscriber.getName()] = subscriber
+            # TODO: Remove Unique "Count" Identifier
+            uniqueIdentifier: str = str(len(self._subscribers))
+            self._subscribers[subscriber.getName() + uniqueIdentifier] = subscriber
 
     def unSubscribe(self, subscriber: Subscriber):
         if subscriber and subscriber.getName() in self._subscribers:

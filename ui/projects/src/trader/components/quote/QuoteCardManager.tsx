@@ -1,11 +1,11 @@
-import React, {FC, ReactElement, useState} from 'react';
+import React, {FC, ReactElement, useEffect, useState} from 'react';
 import {QuoteCard} from "./QuoteCard";
 import {SendMessage} from "react-use-websocket";
 import {AssetName, Quote} from "../../model/Quote";
 import TraderDao from "../../dao/TraderDao";
 import {WebSocketMessage} from "react-use-websocket/dist/lib/types";
-import {useAppDispatch} from "../../storage/TraderReduxHooks";
-import {updateMessage} from "../../storage/TraderReduxSlice";
+import {useAppDispatch, useAppSelector} from "../../storage/TraderReduxHooks";
+import {updateActiveAssets, updateMessage} from "../../storage/TraderReduxSlice";
 import {WebSocketConnection} from "../sockets/WebSocketConnection";
 import {
     DropdownMenu, DropdownMenuCheckboxItem,
@@ -15,7 +15,8 @@ import {
     DropdownMenuTrigger
 } from "../../../components/ui/dropdown-menu";
 import { Button } from 'src/components/ui/button';
-import {TraderConfig} from "../../configs/configs";
+import {TraderConfig} from "../../configs/Configs";
+import {DropdownMenuCheckboxItemProps} from "@radix-ui/react-dropdown-menu";
 
 export type QuoteCardManagerProps = {}
 export const QuoteCardManager: FC<QuoteCardManagerProps> = (props) => {
@@ -23,6 +24,23 @@ export const QuoteCardManager: FC<QuoteCardManagerProps> = (props) => {
     const [quoteCards, setQuoteCards] = useState<ReactElement[]>([]);
     const [activeAssets, setActiveAssets] = useState<string[]>([]);
     const reduxPublisher = useAppDispatch()
+    const appMetaData = useAppSelector( state => {
+        return state;
+    })
+
+    useEffect(() => {
+        if (appMetaData.traderMetaData.assets.length > 0
+            && appMetaData.traderMetaData.assets !== activeAssets
+        ) {
+            const myActiveAssets = [];
+            for (let activeAsset of appMetaData.traderMetaData.assets) {
+                handleRequestForQuote(activeAsset as unknown as AssetName)
+                myActiveAssets.push(activeAsset);
+            }
+            setActiveAssets(myActiveAssets);
+        }
+    }, [appMetaData.traderMetaData.assets]);
+
 
     const receiveMessage = (message: Quote) => {
         reduxPublisher(updateMessage(message))
@@ -39,28 +57,36 @@ export const QuoteCardManager: FC<QuoteCardManagerProps> = (props) => {
     }
 
     const handleRequestForQuote = async (assetName: AssetName) => {
-        console.log("an",assetName)
         if (!activeAssets.includes(assetName)) {
             const myQuoteCard = [...quoteCards];
-            myQuoteCard.push(<QuoteCard assetName={assetName} />)
+            myQuoteCard.push(<QuoteCard key={assetName} assetName={assetName} />)
             setQuoteCards(myQuoteCard)
             await TraderDao.requestForQuote(assetName);
         }
     }
 
-    const onAssetSelectionChanged = (assetName: string) => {
+    const onAssetSelectionChanged = (assetName: AssetName) => {
         if (activeAssets.includes(assetName)) {
             const myActiveAssets = [];
-            for (let activeAsset in activeAssets) {
+            for (let activeAsset of activeAssets) {
                 if (activeAsset !== assetName){
                     myActiveAssets.push(activeAsset)
                 }
             }
             setActiveAssets(myActiveAssets);
+            reduxPublisher(updateActiveAssets(myActiveAssets))
+            const activeQuoteCards = [];
+            for (let quoteCard of quoteCards) {
+                if (quoteCard.key !== assetName){
+                    activeQuoteCards.push(quoteCard)
+                }
+            }
+            setQuoteCards(activeQuoteCards);
         } else {
-            const myActiveAssets = activeAssets;
+            const myActiveAssets = JSON.parse(JSON.stringify(activeAssets));
             myActiveAssets.push(assetName);
             setActiveAssets(myActiveAssets);
+            reduxPublisher(updateActiveAssets(myActiveAssets))
         }
     }
 
@@ -94,7 +120,8 @@ export const QuoteCardManager: FC<QuoteCardManagerProps> = (props) => {
                                 key={assetName}
                                 checked={activeAssets.includes(assetName)}
                                 onCheckedChange={() => onAssetSelectionChanged(assetName)}
-                                onClick={() => handleRequestForQuote(assetName)}>
+                                onClick={() => handleRequestForQuote(assetName)}
+                            >
                                 {assetName}
                             </DropdownMenuCheckboxItem>
                         )

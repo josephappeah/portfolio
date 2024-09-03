@@ -17,7 +17,7 @@ export enum Side {
 export enum Status {
     Open = "Open",
     Pending = "Pending",
-    Closed = "Closed",
+    Filled = "Filled",
     Undefined = "Undefined",
 }
 
@@ -26,7 +26,7 @@ export const DefaultPositions: Position[] = [
         assetName: AssetName.EUR_JPY,
         side: Side.Buy,
         amount: 300,
-        status: Status.Closed,
+        status: Status.Filled,
         quote: {
             assetName: "",
             quote: ""
@@ -36,7 +36,7 @@ export const DefaultPositions: Position[] = [
         assetName: AssetName.EUR_USD,
         side: Side.Buy,
         amount: 400,
-        status: Status.Closed,
+        status: Status.Filled,
         quote: {
             assetName: "",
             quote: ""
@@ -46,7 +46,7 @@ export const DefaultPositions: Position[] = [
         assetName: AssetName.EUR_USD,
         side: Side.Buy,
         amount: 250,
-        status: Status.Closed,
+        status: Status.Filled,
         quote: {
             assetName: "",
             quote: ""
@@ -56,7 +56,7 @@ export const DefaultPositions: Position[] = [
         assetName: AssetName.EUR_JPY,
         side: Side.Sell,
         amount: 700,
-        status: Status.Closed,
+        status: Status.Filled,
         quote: {
             assetName: "",
             quote: ""

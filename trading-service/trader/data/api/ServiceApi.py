@@ -70,7 +70,7 @@ class TraderServiceApi:
                 if not TradeServiceRequestValidator.isValidNewPositionRequest(message):
                     return ApiResponseGenerator.BadRequestResponse(
                         message, ApiResponseMessage.InvalidAccountBalanceFetch.value)
-                res: Any = TraderServiceApi.traderServiceModule.handleGetAccountBalance(message)
+                res: Any = TraderServiceApi.traderServiceModule.handleNewPosition(message)
             except Exception as e:
                 TraderServiceApi.Logger.error("Failed To Handle AccountBalanceFetch With Error: ", e)
                 return ApiResponseGenerator.InternalServerErrorResponse(

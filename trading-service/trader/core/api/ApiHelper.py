@@ -34,7 +34,7 @@ class ApiUtil:
             if amountKey in params and \
                 quoteKey in params and sideKey in params and statusKey in params and assetNameKey in params:
                 quote: Quote = Quote(assetName=params[assetNameKey], quote=params[quoteKey])
-                position: Position = Position(quote=quote, status=params[statusKey],
+                position: Position = Position(quote=quote, status=params[statusKey], assetName=params[assetNameKey],
                                               side=params[sideKey], amount=params[amountKey])
                 positions.append(position)
         return positions

@@ -1,4 +1,4 @@
-import {TraderConfig} from "../configs/configs";
+import {TraderConfig} from "../configs/Configs";
 import {AccountBalance} from "../model/Account";
 import {Position} from "../model/Position";
 import {Message, MessageType} from "../model/Message";
@@ -125,6 +125,7 @@ export class TraderDaoUtils {
     }
 
     public static parsePositions(data: any): Position[] {
+        console.log(data)
         const parsedPositions: Position[] = []
         for (let position of data.data.response) {
             parsedPositions.push(JSON.parse(JSON.stringify(position)) as unknown as Position)
