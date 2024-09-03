@@ -3,7 +3,7 @@
 
 # Components
 ## WebSocket Gateway
-- Codebase: 
+- [**Codebase Link**](./trading-service/trader/gateway)
 - Languages/Frameworks: Python/WebSockets
 
 Horizontally scalable microservice that creates and holds a web socket connection to the ui when user opens the web application.
@@ -18,7 +18,7 @@ On Start Up
 - Spins up Connection Manager REST Service that waits on requests for quote
 
 ## Trader Core REST Service
-- Codebase: 
+- [**Codebase Link**](./trading-service/trader/data)
 - Languages/Frameworks: Python
 
 Horizontally scalable microservice for accounts and positions
@@ -27,7 +27,7 @@ Horizontally scalable microservice for accounts and positions
 - Fetches position & account updates from DB
 
 ## Connection Manager REST Service
-- Codebase: 
+- [**Codebase Link**](./trading-service/trader/gateway/service)
 - Languages/Frameworks: Python
 
 Horizontally scalable microservice for price subscriptions
@@ -41,7 +41,7 @@ Horizontally scalable microservice for price subscriptions
 Simple ReactJS application
 
 ## Price Generator
-- Codebase: 
+- [**Codebase Link**](./trading-service/trader/pricing)
 - Languages/Frameworks: Python
   
 At the moment this is a random number generator.
