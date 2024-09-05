@@ -108,9 +108,9 @@ export const QuoteCardManager: FC<QuoteCardManagerProps> = (props) => {
                     {quoteCards.length >= 8 && <div className="col-auto px-10 py-10">{quoteCards[7]}</div>}
                 </div>
             }
-            <DropdownMenu>
+            <DropdownMenu >
                 <DropdownMenuTrigger asChild>
-                    <Button variant="outline">Request For Quote</Button>
+                    <Button variant="outline" className="mx-10">Request For Quote</Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-full">
                     <DropdownMenuLabel>FX</DropdownMenuLabel>

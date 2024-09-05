@@ -49,10 +49,7 @@ export const AccountView:FC<AccountViewProps> = (props) => {
         <>
             <Card>
                 <CardHeader>
-                    <CardTitle>Accounts</CardTitle>
-                    <CardDescription>
-                        How much of each currency you have to trade
-                    </CardDescription>
+                    <CardTitle className="text-2xl">Accounts</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-2">
                     {
@@ -75,7 +72,7 @@ export const AccountView:FC<AccountViewProps> = (props) => {
                     }
                 </CardContent>
                 <CardFooter>
-                    <Button onClick={() => onAccountReset()}>Reset</Button>
+                    <Button variant="outline" onClick={() => onAccountReset()}>Update Account Balance</Button>
                 </CardFooter>
             </Card>
         </>

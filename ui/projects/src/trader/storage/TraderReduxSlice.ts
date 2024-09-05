@@ -1,14 +1,16 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {TraderReduxSlice} from "./TraderReduxConstants";
-import {AssetName, Quote} from "../model/Quote";
+import {Quote} from "../model/Quote";
 import {AccountBalance, DefaultAccountBalance} from "../model/Account";
+import {Views} from "../model/Views";
 const initialState: TraderReduxSlice = {
     message: {
         assetName: "",
         quote: ""
     },
     assets: [],
-    accountBalances: DefaultAccountBalance.accountBalance
+    accountBalances: DefaultAccountBalance.accountBalance,
+    selectedView: Views.TradeView
 };
 
 export const traderReduxSlice = createSlice({
@@ -23,6 +25,9 @@ export const traderReduxSlice = createSlice({
         },
         updateAccountBalance: (state, action:PayloadAction<AccountBalance[]>) => {
             state.accountBalances = action.payload;
+        },
+        updateSelectedView: (state, action:PayloadAction<Views>) => {
+            state.selectedView = action.payload;
         }
     },
 });
@@ -30,6 +35,7 @@ export const traderReduxSlice = createSlice({
 export const {
     updateMessage,
     updateActiveAssets,
-    updateAccountBalance
+    updateAccountBalance,
+    updateSelectedView
 } = traderReduxSlice.actions;
 export default traderReduxSlice.reducer;

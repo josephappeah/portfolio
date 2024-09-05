@@ -1,8 +1,10 @@
-import {AssetName, Quote} from "../model/Quote";
+import {Quote} from "../model/Quote";
 import {AccountBalance} from "../model/Account";
+import {Views} from "../model/Views";
 
 export type TraderReduxSlice = {
     message: Quote,
     assets: string[],
-    accountBalances: AccountBalance[]
+    accountBalances: AccountBalance[],
+    selectedView: Views
 }
