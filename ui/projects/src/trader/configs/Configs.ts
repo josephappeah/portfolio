@@ -3,15 +3,15 @@ import {AssetName} from "../model/Quote";
 export const TraderConfig = {
     TraderService: {
         webSocketService: {
-            Host: "ws://localhost:",
+            Host: "ws://ec2-54-90-208-49.compute-1.amazonaws.com:",
             Port: "8765",
         },
         quoteService: {
-            Host: "http://localhost:",
+            Host: "http://ec2-54-90-208-49.compute-1.amazonaws.com:",
             Port: "8080"
         },
         dataService:{
-            Host: "http://localhost:",
+            Host: "http://ec2-54-90-208-49.compute-1.amazonaws.com:",
             Port: "8081"
         },
         paths : {
