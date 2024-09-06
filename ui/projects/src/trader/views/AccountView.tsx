@@ -1,5 +1,5 @@
 import React, {FC, useEffect, useState} from 'react';
-import {Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle} from "../../components/ui/card";
+import {Card, CardContent, CardFooter, CardHeader, CardTitle} from "../../components/ui/card";
 import {Label} from "../../components/ui/label";
 import {Input} from "../../components/ui/input";
 import {Button} from "../../components/ui/button";
@@ -46,7 +46,7 @@ export const AccountView:FC<AccountViewProps> = (props) => {
     }, []);
 
     return (
-        <>
+        <div className="px-10">
             <Card>
                 <CardHeader>
                     <CardTitle className="text-2xl">Accounts</CardTitle>
@@ -54,8 +54,8 @@ export const AccountView:FC<AccountViewProps> = (props) => {
                 <CardContent className="space-y-2">
                     {
                         accountBalance.map(balance =>
-                            <div key={balance.currency} className="grid w-full items-center gap-1.5">
-                                <Label htmlFor="email">
+                            <div key={balance.currency} className="grid w-full items-center gap-1.5 py-2">
+                                <Label htmlFor="currency" className="font-medium">
                                     {balance.currency} ({TraderUtils.currencyToCurrencySymbol(balance.currency)})
                                 </Label>
                                 <Input type="number" placeholder={balance.balance.toString()}
@@ -75,6 +75,6 @@ export const AccountView:FC<AccountViewProps> = (props) => {
                     <Button variant="outline" onClick={() => onAccountReset()}>Update Account Balance</Button>
                 </CardFooter>
             </Card>
-        </>
+        </div>
     )
 }

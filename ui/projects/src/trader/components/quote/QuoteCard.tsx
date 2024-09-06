@@ -19,6 +19,7 @@ import {QuoteValidation} from "./QuoteValidation";
 import {AccountBalance, DefaultAccountBalance} from "../../model/Account";
 import {updateAccountBalance} from "../../storage/TraderReduxSlice";
 import {Loading} from "../../assets/Loading";
+import {useToast} from "../../../components/hooks/use-toast";
 
 export type QuoteCardProps = {
     assetName: AssetName;
@@ -43,6 +44,7 @@ function useInterval(callback: any, delay: any) {
 }
 
 export const QuoteCard: FC<QuoteCardProps> = (props) => {
+    const { toast } = useToast();
     const isLoadingDuration: number = 3000;
     const quoteColorRed: string = "#c62828";
     const quoteColorGreen: string = "#2e7d32";
@@ -122,6 +124,12 @@ export const QuoteCard: FC<QuoteCardProps> = (props) => {
                 status: Status.Filled
             }
             TraderDao.newPosition(myQuote, myPosition)
+                .then((res) => {
+                    console.log(res);
+                    // @ts-ignore
+                    document.getElementById("showHideModal").click();
+                    toast({description: side + " " + props.assetName + "Completed",})
+                })
             updateAccountBalances()
         } else {
             alert("Insufficient Funds")
@@ -183,7 +191,9 @@ export const QuoteCard: FC<QuoteCardProps> = (props) => {
                         </div>
                     </div>
                     <DialogFooter className="grid w-full grid-cols-2">
-                        <DialogTrigger asChild><Button variant="outline" type="submit">Cancel</Button></DialogTrigger>
+                        <DialogTrigger asChild>
+                            <Button id="showHideModal" variant="outline" type="submit">Cancel</Button>
+                        </DialogTrigger>
                         <Button type="submit" onClick={() => handleNewPosition()}>{side}</Button>
                     </DialogFooter>
                 </DialogContent>

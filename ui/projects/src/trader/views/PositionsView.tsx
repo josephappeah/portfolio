@@ -13,9 +13,9 @@ import {Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle} f
 import {Position} from "../model/Position";
 import TraderDao from "../dao/TraderDao";
 
-export type PositionsView = {}
+export type PositionsViewProps = {}
 
-export const PositionsView:FC<PositionsView> = (props) => {
+export const PositionsView:FC<PositionsViewProps> = (props) => {
     const [positions, setPositions] = useState<Position[]>([])
 
     useEffect(() => {
@@ -25,10 +25,10 @@ export const PositionsView:FC<PositionsView> = (props) => {
     }, []);
 
     return (
-        <>
+        <div className="px-10">
             <Card>
                 <CardHeader>
-                    <CardTitle>Positions</CardTitle>
+                    <CardTitle className="text-2xl">Positions</CardTitle>
                     <CardDescription>
                     </CardDescription>
                 </CardHeader>
@@ -37,19 +37,19 @@ export const PositionsView:FC<PositionsView> = (props) => {
                         <TableCaption></TableCaption>
                         <TableHeader>
                             <TableRow>
-                                <TableHead className="w-[100px]">Asset</TableHead>
-                                <TableHead>Side</TableHead>
-                                <TableHead>Amount</TableHead>
-                                <TableHead className="text-right">Status</TableHead>
+                                <TableHead className="text-center">Asset</TableHead>
+                                <TableHead className="text-center">Side</TableHead>
+                                <TableHead className="text-center">Amount</TableHead>
+                                <TableHead className="text-center">Status</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
                             {positions.map((position) => (
                                 <TableRow key={position.assetName}>
-                                    <TableCell className="font-medium">{position.assetName}</TableCell>
-                                    <TableCell>{position.side}</TableCell>
-                                    <TableCell>{position.amount}</TableCell>
-                                    <TableCell className="text-right">{position.status}</TableCell>
+                                    <TableCell className="text-center">{position.assetName}</TableCell>
+                                    <TableCell className="text-center">{position.side}</TableCell>
+                                    <TableCell className="text-center">{position.amount}</TableCell>
+                                    <TableCell className="text-center">{position.status}</TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>
@@ -63,6 +63,6 @@ export const PositionsView:FC<PositionsView> = (props) => {
                 <CardFooter>
                 </CardFooter>
             </Card>
-        </>
+        </div>
     )
 }

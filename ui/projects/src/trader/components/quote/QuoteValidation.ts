@@ -35,12 +35,12 @@ export class QuoteValidation {
             if (accountBalance.currency === toCurrency) {
                 myAccountBalance = {
                     currency: toCurrency,
-                    balance: accountBalance.balance + toAmount,
+                    balance: parseFloat(String(accountBalance.balance)) + parseFloat(String(toAmount)),
                 }
             } else if (accountBalance.currency === fromCurrency) {
                 myAccountBalance = {
                     currency: fromCurrency,
-                    balance: accountBalance.balance - fromAmount,
+                    balance: parseFloat(String(accountBalance.balance)) - parseFloat(String(fromAmount)),
                 }
             }
             updatedAccountBalances.push(myAccountBalance);
