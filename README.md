@@ -1,4 +1,4 @@
-# FX Trader Service
+# FX Trader Service | [Public URL Here](http://ec2-100-26-175-78.compute-1.amazonaws.com:3000/)
 ![screenshot](fx-trader.png)
 
 # Components
